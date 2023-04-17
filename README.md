@@ -1,8 +1,18 @@
 # Pylontech control service
 
-This is a small example on how to control Pylontech batteries.
+A small implementation for controlling Pylontech batteries.
+This project includes a damon which switches a raspberry PI output for a specific percentage of the battery system.
+It also includes a telegram-bot which gives the data to the outside world.
 
+## Usage
 
+### The battery daemon
+
+TBD
+
+### The telegram bot
+
+TBD
 
 ## Using the daemons
 
