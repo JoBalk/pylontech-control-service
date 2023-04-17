@@ -1,0 +1,9 @@
+[Unit]
+Description=Controlling pylontech batteries	
+
+[Service]
+ExecStart=/usr/bin/python3 /home/pi/battery/daemon.py
+Restart=always
+
+[Install]
+WantedBy=multi-user.target

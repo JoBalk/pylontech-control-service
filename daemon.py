@@ -2,8 +2,8 @@ import time
 import RPi.GPIO as GPIO
 import logging
 from systemd import journal
-from battery import Battery
-from battery import OutputProcessor
+from lib.battery import Battery
+from lib.battery import OutputProcessor
 
 relais = 17
 GPIO.setmode(GPIO.BCM)

@@ -1,0 +1,9 @@
+[Unit]
+Description=Telegram bot for pylontech batteries
+
+[Service]
+ExecStart=/usr/bin/python3 /home/pi/battery/telegram_bot.py
+Restart=always
+
+[Install]
+WantedBy=multi-user.target

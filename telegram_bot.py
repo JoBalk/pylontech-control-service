@@ -3,7 +3,7 @@ import os
 from telegram import Update
 from telegram.ext import ApplicationBuilder, ContextTypes, CommandHandler
 from dotenv import load_dotenv
-from battery import Battery
+from lib.battery import Battery
 
 load_dotenv()
 allow_list = os.getenv('TELEGRAM_ALLOW_LIST').split(',')
