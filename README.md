@@ -42,17 +42,32 @@ stty -F /dev/ttyUSB0 115200 raw -echo
 echo -ne 'login debug\n' > /dev/ttyUSB0
 ```
 
-### Exccuting command
+### Executing commands
 
 Baud rate needs to be at 115200.
 
 ```bash
+stty -F /dev/ttyUSB0 115200 raw -echo
+```
+Executing commands:
+
+```bash
 echo -ne 'pwrsys\n' > /dev/ttyUSB0
+echo -ne 'pwrs\n' > /dev/ttyUSB0
+...
 ```
 
-### Parsing output
+See the official Pylontech-documentation for the complete command list.
 
-Baud rate needs to be the same as on the executing site. So for normal commands 115200.
+### Reading response from the batteries
+
+Baud rate needs to be the same as on the executing site. So for normal commands it needs to be 115200.
+
+```bash
+stty -F /dev/ttyUSB0 115200 raw -echo
+```
+
+Reading from the battery-device:
 
 ```bash
 cat -v /dev/ttyUSB0
