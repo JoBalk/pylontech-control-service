@@ -20,6 +20,9 @@ class Battery:
             time.sleep(1)
             # Set the baudrate back
             self.ser.baudrate = 115200
+            # Logs in into admin mode
+            self.ser.write(b"login debug\n")
+            time.sleep(1)
 
     # Public: Reads from the serial input.
     def read(self):

@@ -23,6 +23,10 @@ while True:
         elif system_soc < 40:
             GPIO.output(relais, True)
             journal.send("%s - AN" % processed['System SOC'])
+    elif len(processed) == 0:
+        # If the result seems to be empty, we force a reconnection by re-instantiating the class
+        journal.send("Empty result: %s" % output)
+        battery = Battery()
     else:
         journal.send("ERROR: %s" % output)
         print(output)
