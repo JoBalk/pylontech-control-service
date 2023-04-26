@@ -4,6 +4,8 @@ A small implementation for controlling Pylontech batteries.
 This project includes a damon which switches a raspberry PI output for a specific percentage of the battery system.
 It also includes a telegram-bot which gives the data to the outside world.
 
+This project can be used for home-automation. Especially for using the battery in an IOT-environment. 
+
 ## Usage
 
 ### The battery daemon
