@@ -29,7 +29,7 @@ async def pwr_command(update: Update, context: ContextTypes.DEFAULT_TYPE) -> Non
         await update.message.reply_text(battery.exec('pwr'))
 
 if __name__ == '__main__':
-    application = ApplicationBuilder().token(os.getenv('TELEGRAM_TOKEN')).build()
+    application = ApplicationBuilder().token(os.getenv('TELEGRAM_TOKEN')).read_timeout(30).write_timeout(30).build()
     application.add_handler(CommandHandler('start', start))
     application.add_handler(CommandHandler("pwrsys", pwrsys_command))
     application.add_handler(CommandHandler("pwr", pwr_command))
