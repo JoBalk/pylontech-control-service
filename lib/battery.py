@@ -69,6 +69,6 @@ class OutputProcessor:
             values = line.split(':')
             if len(values) == 2:
                 key = values[0].strip()
-                value = ''.join(c for c in values[1] if c.isdigit())
+                value = ''.join(c for c in values[1] if(c.isdigit() or c == '-'))
                 processed[key] = int(value)
         return processed
