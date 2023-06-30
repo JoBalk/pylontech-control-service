@@ -1,6 +1,7 @@
 import serial
 import threading
 import time
+from systemd import journal
 
 class Battery:
     ser = serial.Serial('/dev/ttyUSB0')
@@ -11,23 +12,27 @@ class Battery:
 
     # Private: Checks for existing connection and establish one if necessary.
     def __connect(self):
-        if not self.ser.isOpen():
-            print("Connecting...")
-            # For connecting to the batteries, we need to set the baudrate to 1200
-            self.ser.baudrate = 1200
-            # Now we need to send this magic command.
-            self.ser.write(b"~20014682C0048520FCC3\r")
-            time.sleep(1)
-            # Set the baudrate back
-            self.ser.baudrate = 115200
-            # Logs in into admin mode
-            self.ser.write(b"login debug\n")
-            time.sleep(1)
+        journal.send("Connecting...")
+        # For connecting to the batteries, we need to set the baudrate to 1200
+        self.ser.baudrate = 1200
+        # Now we need to send this magic command.
+        self.ser.write(b"~20014682C0048520FCC3\r")
+        time.sleep(1)
+        # Set the baudrate back
+        self.ser.baudrate = 115200
+        time.sleep(1)
+        # Logs in into admin mode
+        self.ser.reset_input_buffer()
+        self.ser.write("login debug".encode('ascii'))
+        self.ser.write(b"\n")
+        time.sleep(1)
+        self.ser.reset_input_buffer()
 
     # Public: Reads from the serial input.
     def read(self):
         # Check for open connection first.
-        self.__connect()
+        if not self.ser.isOpen():
+            self.__connect()
         output = ''
         # Reads until the output ends.
         while True:
@@ -41,7 +46,6 @@ class Battery:
                     break
                 output += line + "\n"
             else:
-                print(line)
                 # Waits for the next line.
                 time.sleep(1)
         return output
@@ -49,8 +53,10 @@ class Battery:
     # Public: Executes command at the batteries
     def exec(self, command):
         # Check for open connection first.
-        self.__connect()
+        if not self.ser.isOpen():
+            self.__connect()
         # Writes command to the batteries.
+        journal.send('Executing Command: ' + command)
         self.ser.write(command.encode('ascii'))
         # Ends the Command.
         self.ser.write(b"\n")
