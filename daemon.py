@@ -29,9 +29,9 @@ class HeatingRod:
         response = requests.get('http://' + self.ip + '/relay/0?turn=off')
         return response.json()
 
-heating_rod_1 = HeatingRod('192.168.178.135')
-heating_rod_2 = HeatingRod('192.168.178.157')
-heating_rod_3 = HeatingRod('192.168.178.158')
+heating_rod_1 = HeatingRod('192.168.190.32')
+heating_rod_2 = HeatingRod('192.168.190.33')
+heating_rod_3 = HeatingRod('192.168.190.34')
 
 while True:
     output = battery.exec('pwrsys')
@@ -41,28 +41,22 @@ while True:
         system_curr = processed['System Curr']
 
         rod_1_on = heating_rod_1.state()
-        journal.send("Current: " + str(system_curr) + 'mA; Battery: ' + str(system_soc) + '%')
+        journal.send("Current: " + str(system_curr) + 'mA; Battery: ' + str(system_soc) + '%; rod1: ' + str(rod_1_on))
 
         # Turning heating rods on
-        if system_curr > 47000 and system_soc > 50:
+        if system_curr > 50000 and system_soc > 85:
             heating_rod_1.turn_on()
-            journal.send("ON - heating rod 1")
         if rod_1_on and system_curr > 47000:
             heating_rod_2.turn_on()
-            journal.send("ON - heating rod 2")
-        if rod_1_on and system_soc > 95:
+        if rod_1_on and system_soc == 100:
             heating_rod_3.turn_on()
-            journal.send("ON - heating rod 3") 
 
         # Turning heating rods off
         if system_curr < 0 and system_soc < 94:
             heating_rod_1.turn_off()
-            journal.send("OFF - heating rod 1")
             heating_rod_2.turn_off()
-            journal.send("OFF - heating rod 2")
         if system_soc < 94:
             heating_rod_3.turn_off()
-            journal.send("OFF - heating rod 3")
 
     elif len(processed) == 0:
         # If the result seems to be empty, we force a reconnection by re-instantiating the class
