@@ -6,9 +6,9 @@ from systemd import journal
 from lib.battery import Battery
 from lib.battery import OutputProcessor
 
-#relais = 17
-#GPIO.setmode(GPIO.BCM)
-#GPIO.setup(relais, GPIO.OUT)
+relais = 17
+GPIO.setmode(GPIO.BCM)
+GPIO.setup(relais, GPIO.OUT)
 
 battery = Battery()
 processor = OutputProcessor()
@@ -49,6 +49,8 @@ while True:
         if rod_1_on and system_curr > 47000:
             heating_rod_2.turn_on()
         if rod_1_on and system_soc == 100:
+            heating_rod_1.turn_on()
+            heating_rod_2.turn_on()
             heating_rod_3.turn_on()
 
         # Turning heating rods off
@@ -57,6 +59,12 @@ while True:
             heating_rod_2.turn_off()
         if system_soc < 94:
             heating_rod_3.turn_off()
+
+        # Turning relais on/off.
+        if system_soc < 35:
+            GPIO.output(relais, True)
+        else:
+            GPIO.output(relais, False)
 
     elif len(processed) == 0:
         # If the result seems to be empty, we force a reconnection by re-instantiating the class
